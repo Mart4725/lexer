@@ -8,3 +8,6 @@ class Token:
 
     def __repr__(self):
         return f"{self.type:>8} | {self.value:>4} | {self.error}"
+    
+    def isspace(self):
+        return self.type in ["WHITESPACE", "NEWLINE"]

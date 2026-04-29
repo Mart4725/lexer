@@ -1,6 +1,5 @@
-from token import Token
-from rules import KEYWORDS, OPERATORS, DELIMITERS
-
+from custom_token import Token
+import rules
 
 class Lexer:
     def __init__(self, code):
@@ -26,6 +25,9 @@ class Lexer:
     def tokenize(self):
         while self.pos < len(self.code):
             current = self.peek()
+
+            if current is None:
+                break
 
             if current.isspace():
                 self.handle_whitespace()
@@ -57,8 +59,8 @@ class Lexer:
 
         lexeme = self.code[start:self.pos]
 
-        if lexeme in KEYWORDS:
-            return Token(KEYWORDS[lexeme], lexeme)
+        if lexeme in rules.KEYWORDS:
+            return Token(rules.KEYWORDS[lexeme], lexeme)
 
         return Token("NAME", lexeme)
 
@@ -103,19 +105,19 @@ class Lexer:
         # operadores de 2 caracteres
         if self.pos + 1 < len(self.code):
             two = self.code[self.pos:self.pos+2]
-            if two in OPERATORS:
+            if two in rules.OPERATORS:
                 self.pos += 2
-                return Token(OPERATORS[two], two)
+                return Token(rules.OPERATORS[two], two)
 
         current = self.peek()
 
-        if current in OPERATORS:
+        if current in rules.OPERATORS:
             self.advance()
-            return Token(OPERATORS[current], current)
+            return Token(rules.OPERATORS[current], current)
 
-        if current in DELIMITERS:
+        if current in rules.DELIMITERS:
             self.advance()
-            return Token(DELIMITERS[current], current)
+            return Token(rules.DELIMITERS[current], current)
 
         self.advance()
         return Token("ERROR", current, "Carácter inválido")
