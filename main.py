@@ -1,25 +1,22 @@
 import os
-print(os.getcwd())
-
 from lexer import Lexer
 
-filename = "input.txt"
+# carpeta donde están los tests
+base_dir = os.path.dirname(__file__)
+tests_dir = os.path.join(base_dir, "test_cases")  # crea esta carpeta
 
-def read_source(path):
-    for encoding in ("utf-8", "utf-8-sig", "utf-16"):
-        try:
-            with open(path, "r", encoding=encoding) as file:
-                return file.read()
-        except UnicodeError:
-            continue
-    with open(path, "r") as file:
-        return file.read()
+for filename in os.listdir(tests_dir):
+    if filename.endswith(".txt"):
+        filepath = os.path.join(tests_dir, filename)
 
+        print(f"\n📄 Procesando: {filename}")
+        print("-" * 40)
 
-code = read_source(filename)
+        with open(filepath, "r", encoding="utf-8") as file:
+            code = file.read()
 
-lexer = Lexer(code)
-tokens = lexer.tokenize()
+        lexer = Lexer(code)
+        tokens = lexer.tokenize()
 
-for token in tokens:
-    print(token)
+        for token in tokens:
+            print(token)
